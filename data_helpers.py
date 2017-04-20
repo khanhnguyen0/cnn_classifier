@@ -96,19 +96,36 @@ def load_data_and_labels(positive_data_file, negative_data_file):
     ruby_data = [(' ').join([''.join(d) for d in ruby_data[x:x+100]]) for x in range(0,len(ruby_data),100)]
     print('ruby length: ',len(ruby_data))
 
+    # Objective C data
+
+    with open('./data/objc.csv', 'r') as f:
+        reader = csv.reader(f)
+        data_list = list(reader)[1:]
+    objc_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(objc_data))
+
+    objc_data = re.findall(tokenSplit,objc_data)
+    # print(len(objc_data))
+
+        # flattened = [d for d in data for data in objc_data]
+        # print(flattened[0])
+    objc_data = [(' ').join([''.join(d) for d in objc_data[x:x+100]]) for x in range(0,len(objc_data),100)]
+    print('objc length: ',len(objc_data))
+
     # Split by words
 
-    x_text = javascript_data + java_data + cpp_data + csharp_data + python_data + ruby_data
+    x_text = javascript_data + java_data + cpp_data + csharp_data + python_data + ruby_data + objc_data
     # print(x_text)
     # Generate labels
-    javascript_label = [[1, 0,0,0,0,0] for _ in javascript_data]
-    java_label = [[0,1,0,0,0,0] for _ in java_data]
-    cpp_label = [[0,0,1,0,0,0] for _ in cpp_data]
-    csharp_label = [[0,0,0,1,0,0] for _ in csharp_data]
-    python_label = [[0,0,0,0,1,0] for _ in python_data]
-    ruby_label = [[0,0,0,0,0,1] for _ in ruby_data]
+    javascript_label = [[1, 0,0,0,0,0,0] for _ in javascript_data]
+    java_label = [[0,1,0,0,0,0,0] for _ in java_data]
+    cpp_label = [[0,0,1,0,0,0,0] for _ in cpp_data]
+    csharp_label = [[0,0,0,1,0,0,0] for _ in csharp_data]
+    python_label = [[0,0,0,0,1,0,0] for _ in python_data]
+    ruby_label = [[0,0,0,0,0,1,0] for _ in ruby_data]
+    objc_label = [[0,0,0,0,0,0,1] for _ in objc_data]
 
-    y = np.concatenate([javascript_label, java_label, cpp_label,csharp_label,python_label,ruby_label], 0)
+    y = np.concatenate([javascript_label, java_label, cpp_label,csharp_label,python_label,ruby_label, objc_label], 0)
     return [x_text, y]
 
 
