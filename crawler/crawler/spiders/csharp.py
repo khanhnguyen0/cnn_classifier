@@ -11,8 +11,16 @@ class Spider(scrapy.Spider):
 
     def parseURL(self, response):
         a = '';
-        for code in response.xpath('//pre[contains(@class,"csharp highlighted_source")]/span[contains(@class,"kw")]/text()').extract():
-                a+= code+' '
+        comments = r'^\/\/\/ | ^\/\*'
+        for code in response.xpath('//pre[contains(@class,"csharp highlighted_source")]/span/text() | //pre[contains(@class,"csharp highlighted_source")]/text() | //pre[contains(@class,"csharp highlighted_source")]/span/br').extract():
+            if code == "<br>":
+                a += "\n"
+                continue
+            if re.match(comments, code):
+                a+="\n"
+                continue
+            else:
+                a+= re.sub(r"\".*\"",'strv',code)
         if len(a)>0:
             yield {
                     'keywords':a
