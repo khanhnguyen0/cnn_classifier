@@ -57,7 +57,7 @@ max_document_length = max([len(re.findall(tokenSplit, x)) for x in x_text])
 print(max_document_length)
 # x_text = [re.findall(tokenSplit, x) for x in x_text]
 # print(x_text[0])
-vocab_processor = learn.preprocessing.VocabularyProcessor(200, tokenizer_fn = tokenizer)
+vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length, tokenizer_fn = tokenizer)
 x = np.array(list(vocab_processor.fit_transform(x_text)))
 # x = [np.array(list(g)) for f]
 # test = np.array(list(vocab_processor.fit_transform()

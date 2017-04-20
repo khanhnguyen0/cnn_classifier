@@ -19,14 +19,9 @@ def load_data_and_labels(positive_data_file, negative_data_file):
     # print(len(javascript_data))
 
     javascript_data = re.findall(tokenSplit,javascript_data)
-    # print(len(javascript_data))
-    # print(javascript_data[0])
-
-    # flattened = [d for d in data for data in javascript_data]
-    # print(flattened[0])
     javascript_data = [(' ').join([''.join(d) for d in javascript_data[x:x+100]]) for x in range(0,len(javascript_data),100)]
-    print('javascript length: %d',len(javascript_data))
-    # print(data_list[0])
+    print('javascript length: ',len(javascript_data))
+    #Java data
     with open('./data/java.csv', 'r') as f:
         reader = csv.reader(f)
         data_list = list(reader)[1:]
@@ -39,8 +34,9 @@ def load_data_and_labels(positive_data_file, negative_data_file):
         # print(flattened[0])
     java_data = [(' ').join([''.join(d) for d in java_data[x:x+100]]) for x in range(0,len(java_data),100)]
     # print(java_data[0])
-    print('java length: %d',len(java_data))
+    print('java length: ',len(java_data))
 
+    #CPP data
     with open('./data/cpp.csv', 'r') as f:
         reader = csv.reader(f)
         data_list = list(reader)[1:]
@@ -53,15 +49,66 @@ def load_data_and_labels(positive_data_file, negative_data_file):
         # flattened = [d for d in data for data in cpp_data]
         # print(flattened[0])
     cpp_data = [(' ').join([''.join(d) for d in cpp_data[x:x+100]]) for x in range(0,len(cpp_data),100)]
-    print('cpp length: %d',len(cpp_data))
+    print('cpp length: ',len(cpp_data))
+
+    # C# data
+    with open('./data/csharp.csv', 'r') as f:
+        reader = csv.reader(f)
+        data_list = list(reader)[1:]
+    csharp_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(csharp_data))
+
+    csharp_data = re.findall(tokenSplit,csharp_data)
+    # print(len(csharp_data))
+
+        # flattened = [d for d in data for data in csharp_data]
+        # print(flattened[0])
+    csharp_data = [(' ').join([''.join(d) for d in csharp_data[x:x+100]]) for x in range(0,len(csharp_data),100)]
+    print('csharp length: ',len(csharp_data))
+
+    # Python data
+    with open('./data/python.csv', 'r') as f:
+        reader = csv.reader(f)
+        data_list = list(reader)[1:]
+    python_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(python_data))
+
+    python_data = re.findall(tokenSplit,python_data)
+    # print(len(python_data))
+
+        # flattened = [d for d in data for data in python_data]
+        # print(flattened[0])
+    python_data = [(' ').join([''.join(d) for d in python_data[x:x+100]]) for x in range(0,len(python_data),100)]
+    print('python length: ',len(python_data))
+
+    # Ruby data
+    with open('./data/ruby.csv', 'r') as f:
+        reader = csv.reader(f)
+        data_list = list(reader)[1:]
+    ruby_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(ruby_data))
+
+    ruby_data = re.findall(tokenSplit,ruby_data)
+    # print(len(ruby_data))
+
+        # flattened = [d for d in data for data in ruby_data]
+        # print(flattened[0])
+    ruby_data = [(' ').join([''.join(d) for d in ruby_data[x:x+100]]) for x in range(0,len(ruby_data),100)]
+    print('ruby length: ',len(ruby_data))
+
     # Split by words
-    x_text = javascript_data + java_data + cpp_data
+
+    x_text = javascript_data + java_data + cpp_data + csharp_data + python_data + ruby_data
     # print(x_text)
     # Generate labels
-    javascript_label = [[1, 0,0] for _ in javascript_data]
-    java_label = [[0,1,0] for _ in java_data]
-    cpp_label = [[0,0,1] for _ in cpp_data]
-    y = np.concatenate([javascript_label, java_label, cpp_label], 0)
+    javascript_label = [[1, 0,0,0,0,0] for _ in javascript_data]
+    java_label = [[0,1,0,0,0,0] for _ in java_data]
+    cpp_label = [[0,0,1,0,0,0] for _ in cpp_data]
+    csharp_label = [[0,0,0,1,0,0] for _ in csharp_data]
+    python_label = [[0,0,0,0,1,0] for _ in python_data]
+    ruby_label = [[0,0,0,0,0,1] for _ in ruby_data]
+
+    y = np.concatenate([javascript_label, java_label, cpp_label,csharp_label,python_label,ruby_label], 0)
     return [x_text, y]
 
 
