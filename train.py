@@ -12,6 +12,7 @@ from tensorflow.contrib import learn
 # Parameters
 # ==================================================
 
+
 # Data loading params
 tf.flags.DEFINE_float("dev_sample_percentage", .1, "Percentage of the training data to use for validation")
 tf.flags.DEFINE_string("positive_data_file", "./data/rt-polaritydata/rt-polarity.pos", "Data source for the positive data.")
@@ -20,7 +21,7 @@ tf.flags.DEFINE_string("negative_data_file", "./data/rt-polaritydata/rt-polarity
 # Model Hyperparameters
 tf.flags.DEFINE_integer("embedding_dim", 128, "Dimensionality of character embedding (default: 128)")
 tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
-tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
+tf.flags.DEFINE_integer("num_filters", 150, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularization lambda (default: 0.0)")
 
@@ -41,9 +42,11 @@ for attr, value in sorted(FLAGS.__flags.items()):
     print("{}={}".format(attr.upper(), value))
 print("")
 
-tokenSplit = r'[\w\']+|[""!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~""\\]'
 # Data Preparation
 # ==================================================
+tokenSplit = r'[\w\']+|[""!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~""\\]'
+def tokenizer(docs):
+    return [re.findall(tokenSplit, doc) for doc in docs]
 
 # Load data
 print("Loading data...")
@@ -51,9 +54,14 @@ x_text, y = data_helpers.load_data_and_labels(FLAGS.positive_data_file, FLAGS.ne
 
 # Build vocabulary
 max_document_length = max([len(re.findall(tokenSplit, x)) for x in x_text])
-vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length)
+print(max_document_length)
+# x_text = [re.findall(tokenSplit, x) for x in x_text]
+# print(x_text[0])
+vocab_processor = learn.preprocessing.VocabularyProcessor(200, tokenizer_fn = tokenizer)
 x = np.array(list(vocab_processor.fit_transform(x_text)))
-
+# x = [np.array(list(g)) for f]
+# test = np.array(list(vocab_processor.fit_transform()
+# print(x[0],y[0])
 # Randomly shuffle data
 np.random.seed(10)
 shuffle_indices = np.random.permutation(np.arange(len(y)))
@@ -69,11 +77,12 @@ print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
 print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
 
 
+
 # Training
 # ==================================================
 
 with tf.Graph().as_default():
-    print(y_train.shape[1])
+    # print(y_train.shape[1])
     session_conf = tf.ConfigProto(
       allow_soft_placement=FLAGS.allow_soft_placement,
       log_device_placement=FLAGS.log_device_placement)

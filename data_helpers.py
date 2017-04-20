@@ -11,24 +11,52 @@ def load_data_and_labels(positive_data_file, negative_data_file):
     Returns split sentences and labels.
     """
     # Load data from files
+    tokenSplit = r'[\w\']+|[""!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~""\\]'
     with open('./data/javascript.csv', 'r') as f:
         reader = csv.reader(f)
         data_list = list(reader)[1:]
-    javascript_data = [d[0] for d in data_list]
+    javascript_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(javascript_data))
 
+    javascript_data = re.findall(tokenSplit,javascript_data)
+    # print(len(javascript_data))
+    # print(javascript_data[0])
+
+    # flattened = [d for d in data for data in javascript_data]
+    # print(flattened[0])
+    javascript_data = [(' ').join([''.join(d) for d in javascript_data[x:x+100]]) for x in range(0,len(javascript_data),100)]
+    print('javascript length: %d',len(javascript_data))
+    # print(data_list[0])
     with open('./data/java.csv', 'r') as f:
         reader = csv.reader(f)
         data_list = list(reader)[1:]
-    java_data = [d[0] for d in data_list]
+    java_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(java_data))
 
-    with open('./data/java.csv', 'r') as f:
+    java_data = re.findall(tokenSplit,java_data)
+
+        # flattened = [d for d in data for data in java_data]
+        # print(flattened[0])
+    java_data = [(' ').join([''.join(d) for d in java_data[x:x+100]]) for x in range(0,len(java_data),100)]
+    # print(java_data[0])
+    print('java length: %d',len(java_data))
+
+    with open('./data/cpp.csv', 'r') as f:
         reader = csv.reader(f)
         data_list = list(reader)[1:]
-    cpp_data = [d[0] for d in data_list]
+    cpp_data = ' '.join([''.join(d) for d in data_list])
+    # print(len(cpp_data))
 
+    cpp_data = re.findall(tokenSplit,cpp_data)
+    # print(len(cpp_data))
 
+        # flattened = [d for d in data for data in cpp_data]
+        # print(flattened[0])
+    cpp_data = [(' ').join([''.join(d) for d in cpp_data[x:x+100]]) for x in range(0,len(cpp_data),100)]
+    print('cpp length: %d',len(cpp_data))
     # Split by words
     x_text = javascript_data + java_data + cpp_data
+    # print(x_text)
     # Generate labels
     javascript_label = [[1, 0,0] for _ in javascript_data]
     java_label = [[0,1,0] for _ in java_data]
