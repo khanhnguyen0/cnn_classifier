@@ -86,6 +86,7 @@ with graph.as_default():
             label = ["javascript", "java", "cpp","csharp","python","ruby", "objc"]
             batch_predictions = sess.run([predictions,scores], {input_x: x_test_batch, dropout_keep_prob: 1.0})
             # print(batch_predictions[1])
+            print(batch_predictions[1])
             print('Prediction: ',label[batch_predictions[0][0]], 'score :',np.exp(max(batch_predictions[1][0]))/np.sum(np.exp(batch_predictions[1][0])))
             all_predictions = np.concatenate([all_predictions, batch_predictions[0]])
 

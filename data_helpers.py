@@ -13,7 +13,7 @@ def load_data_and_labels(positive_data_file, negative_data_file):
     # Load data from files
     tokenSplit = r'[\w\']+|[""!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~""\\]'
     with open('./data/javascript.csv', 'r') as f:
-        reader = csv.reader(f)
+        reader = csv.reader(f, delimiter='\t', quoting=csv.QUOTE_NONE)
         data_list = list(reader)[1:]
     javascript_data = ' '.join([''.join(d) for d in data_list])
     # print(len(javascript_data))
