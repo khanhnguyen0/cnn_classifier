@@ -23,7 +23,7 @@ class Spider(scrapy.Spider):
         for url in response.xpath('//div[contains(@class,"file-wrap")]/table/tbody/tr[contains(@class,"js-navigation-item")]/td[contains(@class,"content")]/span/a[contains(@href,*)]/@href').extract():
             if re.match(js,url):
                 yield scrapy.Request('https://github.com'+url,callback = self.parseFileURL)
-            elif re.match(js,url):
+            elif re.match(folder,url):
                 yield scrapy.Request('https://github.com'+url,callback = self.parseRepoURL)
 
 

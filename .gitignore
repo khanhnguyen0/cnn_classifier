@@ -80,6 +80,7 @@ celerybeat-schedule
 
 #tensorflow checkpoints
 runs/
+data/
 
 # virtualenv
 venv/

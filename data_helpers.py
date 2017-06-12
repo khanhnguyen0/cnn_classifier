@@ -2,8 +2,10 @@ import numpy as np
 import re
 import itertools
 from collections import Counter
+import sys
 import csv
 
+csv.field_size_limit(sys.maxsize)
 
 def load_data_and_labels(positive_data_file, negative_data_file):
     """
